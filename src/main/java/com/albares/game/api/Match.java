@@ -22,16 +22,16 @@ public class Match{
     }
     
     
-    public int addUser(Db myDb,User user) throws SQLException{
+    public int addUser(Db myDb,User newUser) throws SQLException{
         PreparedStatement ps = myDb.prepareStatement(
                     "INSERT INTO users (name, score) VALUES (?, ?) returning id;"
             );
-        ps.setString(1, user.getName());
-        ps.setInt(2, user.getScore());
+        ps.setString(1, newUser.getName());
+        ps.setInt(2, newUser.getScore());
         ResultSet rs = myDb.executeQuery(ps);
         rs.next();
-        user.setId(rs.getInt(1));
-        return user.getId();
+        newUser.setId(rs.getInt(1));
+        return newUser.getId();
     }
 
     public List getUsers(Db myDb) throws SQLException {
@@ -49,6 +49,7 @@ public class Match{
             user.setScore(rs.getInt(2));
             users.add(user);
         }
+        
         return users;
     }
 
@@ -93,11 +94,10 @@ public class Match{
     
     
     public void nextTurn(Db myDb) throws SQLException{
-        String s = "SELECT MIN(id) FROM users "
-                            + "UNION ALL"
-                            + "SELECT MIN(id) FROM users WHERE id>?;";
         PreparedStatement ps = myDb.prepareStatement(
-                    s
+                    "SELECT MIN(id) FROM users "
+                            + "UNION ALL"
+                            + "SELECT MIN(id) FROM users WHERE id>?;"
             );
         ps.setInt(1, this.turn);
         ResultSet rs = myDb.executeQuery(ps);

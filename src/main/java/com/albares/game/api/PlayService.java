@@ -20,7 +20,6 @@ public class PlayService {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{token}/{word}")
     public String playMatch(@PathParam("token") String token,@PathParam("word") String word){
-        
         try{
             Db myDb = new Db();
             

@@ -28,6 +28,7 @@ public class UserService {
         if(newUser.getScore()!=0 ){
             newUser.setScore(-Math.abs(newUser.getScore()));
             Parameters.match.addUser(myDb,newUser);
+            myDb.disconnect();
             return "Hackeo detectado... tu token es: "+
                     JWTUtils.generateToken(newUser.getId());
         }
